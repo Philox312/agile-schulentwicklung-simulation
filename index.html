@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agile Schulentwicklung erleben – Simulation für Schulleitungen</title>
+  <meta name="description" content="Browserbasierte Simulation für die Erstqualifizierung schulischer Leitungskräfte: agile Schulentwicklung, Dilemmata, Aufwandsklärung, Blockaden, Interventionen, Review und Retrospektive.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Simulation für die Erstqualifizierung</p>
+        <h1>Agile Schulentwicklung erleben</h1>
+        <p>Schulleitungshandeln unter begrenzter Zeit, Unsicherheit, Konflikten und wechselnden Rahmenbedingungen.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="startBtn" class="primary">Simulation starten</button>
+        <button id="resetBtn" class="ghost">Neu starten</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="main-panel">
+        <section id="intro" class="intro">
+          <div id="startupStatus" class="learning-frame hidden"></div>
+          <div class="learning-frame">
+            <h2>Ziel der Simulation</h2>
+            <p><strong>Nicht</strong> möglichst viele Karten abarbeiten. Ziel ist, schulische Entwicklung unter begrenzter Zeit, Unsicherheit und Konflikten bewusst zu steuern.</p>
+            <div class="principles">
+              <span>Priorisieren</span>
+              <span>Aufwand klären</span>
+              <span>Dilemmata entscheiden</span>
+              <span>Blockaden bearbeiten</span>
+              <span>Review & Retrospektive</span>
+            </div>
+          </div>
+
+          <div class="explain-grid">
+            <div>
+              <h3>Professionelle Rahmung</h3>
+              <p>Die Gruppe bildet ein schulisches Leitungsteam. Es gibt mehr Entwicklungsvorhaben als verfügbare Zeit. Entscheidungen werden sichtbar, Folgen werden erlebbar.</p>
+            </div>
+            <div>
+              <h3>Agile Logik</h3>
+              <p>Vorhaben werden nicht vollständig durchgeplant, sondern in Entwicklungszyklen priorisiert, umgesetzt, überprüft und angepasst.</p>
+            </div>
+            <div>
+              <h3>Transfer</h3>
+              <p>Nach jedem Entwicklungszyklus werden Ergebnisse, Blockaden und Arbeitsweise reflektiert und auf reale Schulleitungspraxis bezogen.</p>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Einstellungen</h3>
+            <label>Personen/Gruppe
+              <select id="players">
+                <option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option>
+              </select>
+            </label>
+            <label>Vorhaben pro Person/Zyklus
+              <select id="storiesPerPlayer">
+                <option>1</option><option selected>2</option><option>3</option>
+              </select>
+            </label>
+            <label>Entwicklungszyklen
+              <select id="sprints">
+                <option>2</option><option selected>3</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="moderation">
+            <button id="toggleFacilitationBtn" class="small">Moderationshinweise anzeigen/ausblenden</button>
+            <div id="facilitationBox" class="facilitation-box hidden">
+              <strong>Einordnung für die Fortbildungsleitung</strong>
+              <ul>
+                <li><strong>Aufwandsklärung:</strong> Unterschiedliche Einschätzungen zeigen Klärungsbedarf.</li>
+                <li><strong>Dilemma:</strong> Schulleitung entscheidet unter Unsicherheit.</li>
+                <li><strong>Blockade:</strong> Mehr Zeit löst nicht jedes Problem; oft braucht es eine passende Intervention.</li>
+                <li><strong>Review:</strong> Nur abgeschlossene Vorhaben erzeugen verlässliche Ergebnisse.</li>
+                <li><strong>Retrospektive:</strong> Das Leitungsteam verbessert seine Arbeitsweise.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="game" class="game hidden">
+          <nav id="timeline" class="timeline"></nav>
+          <div class="status-row">
+            <span id="sprintTag"></span>
+            <span id="weekTag"></span>
+            <span id="playerTag"></span>
+          </div>
+
+          <h2 id="phaseTitle"></h2>
+          <div id="explainContent" class="explain"></div>
+          <div id="phaseText"></div>
+          <div id="actionButtons" class="actions"></div>
+
+          <div id="pokerArea"></div>
+          <div id="scenarioArea"></div>
+          <div id="decisionPathArea"></div>
+          <div id="cardArea"></div>
+          <div id="solutionArea"></div>
+
+          <section id="boardArea" class="board hidden">
+            <div class="board-col backlog-col">
+              <h3>Sammlung schulischer Entwicklungsvorhaben</h3>
+              <div id="backlog"></div>
+            </div>
+            <div class="board-col">
+              <h3>Vorhaben im Entwicklungszyklus</h3>
+              <div id="playerStories"></div>
+            </div>
+            <div class="board-col">
+              <h3>Blockiert</h3>
+              <div id="blocked"></div>
+            </div>
+            <div class="board-col">
+              <h3>Abgeschlossen</h3>
+              <div id="done"></div>
+            </div>
+          </section>
+        </section>
+      </section>
+
+      <aside class="side-panel">
+        <h2>Dashboard</h2>
+        <div id="dashboard"></div>
+        <h3>Aktueller Schritt</h3>
+        <div id="currentCard" class="side-box"></div>
+        <h3>Vorbereitete Handlungsoptionen</h3>
+        <div id="storedSolutionsBox" class="side-box"></div>
+        <h3>Protokoll</h3>
+        <div id="logBox" class="log-box"></div>
+      </aside>
+    </main>
+  </div>
+
+  <div id="zoomOverlay" class="zoom-overlay" aria-hidden="true">
+    <div id="zoomCard" class="zoom-card" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js" defer></script>
+
+  <script>
+    window.addEventListener('error', function (event) {
+      var box = document.getElementById('startupStatus');
+      if (box) {
+        box.classList.remove('hidden');
+        box.innerHTML = '<h2>Technischer Ladehinweis</h2><p>Die Spiellogik konnte nicht vollständig geladen werden.</p><p><strong>Fehler:</strong> ' + String(event.message) + '</p><p>Bitte den gesamten Ordner entpacken bzw. bei GitHub Pages alle Dateien inklusive <code>js/</code>, <code>css/</code> und <code>assets/</code> hochladen.</p>';
+      }
+    });
+    window.setTimeout(function () {
+      var box = document.getElementById('startupStatus');
+      if (!window.__APP_READY__ && box) {
+        box.classList.remove('hidden');
+        box.innerHTML = '<h2>Technischer Ladehinweis</h2><p>Die Oberfläche wurde angezeigt, aber die JavaScript-Dateien wurden nicht aktiviert.</p><p>Öffne die Datei nicht direkt aus der ZIP-Datei. Entpacke den Ordner vollständig oder hoste ihn über GitHub Pages. Wichtig sind <code>index.html</code>, <code>js/data.js</code>, <code>js/app.js</code>, <code>css/styles.css</code> und <code>assets/images/</code>.</p>';
+      }
+    }, 1200);
+  </script>
+
+</body>
+</html>
